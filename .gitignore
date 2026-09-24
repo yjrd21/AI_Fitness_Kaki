@@ -1,0 +1,30 @@
+# Operating system and editor files
+.DS_Store
+.vscode/
+.idea/
+*.iml
+
+# Maven build output and wrapper artifacts
+**/target/
+**/.mvn/wrapper/maven-wrapper.jar
+
+# IDE metadata
+**/.classpath
+**/.factorypath
+**/.project
+**/.settings/
+**/.springBeans
+**/.sts4-cache
+
+# Other build tools
+**/.apt_generated/
+**/build/
+**/nbproject/private/
+**/dist/
+**/nbdist/
+**/.nb-gradle/
+
+# Local environment files
+**/.env
+**/.env.*
+!**/.env.example
