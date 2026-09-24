@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: activityservice
+
+  config:
+    import: optional:file:./atlas-credentials.env[.properties]
+
+  mongodb:
+    uri: ${MONGODB_URI}
+    database: ${MONGODB_DATABASE:fitnessactivity}
+server:
+  port: 8082
