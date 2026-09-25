@@ -14,10 +14,12 @@ import com.fitness.userservice.dto.UserResponse;
 
 import jakarta.validation.Valid;
 import com.fitness.userservice.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 
 @RestController 
 @RequestMapping("/api/users")
 @AllArgsConstructor
+@Slf4j
 public class UserController {
 
     private UserService userService;
@@ -25,16 +27,19 @@ public class UserController {
     // Return DTO for user profile
     @GetMapping("/{userId}")
     public ResponseEntity<UserResponse> getUserProfile(@PathVariable String userId) {
+        log.info("GET /api/users/{} received", userId);
         return ResponseEntity.ok(userService.getUserProfile(userId));
     }
 
     @PostMapping("/register")
     public ResponseEntity<UserResponse> register(@Valid @RequestBody RegisterRequest request) {
+        log.info("POST /api/users/register received for email={}", request.getEmail());
         return ResponseEntity.ok(userService.register(request));
     }
 
     @GetMapping("/{userId}/validate")
     public ResponseEntity<Boolean> validateUser(@PathVariable String userId) {
+        log.info("GET /api/users/{}/validate received", userId);
         return ResponseEntity.ok(userService.existByUserId(userId));
     }
 

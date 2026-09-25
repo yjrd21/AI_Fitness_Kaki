@@ -15,27 +15,32 @@ import java.util.List;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 
 @RestController 
 @RequestMapping("api/activities")
 @AllArgsConstructor 
+@Slf4j
 public class ActivityController {
 
     private ActivityService activityService;
 
     @PostMapping 
     public ResponseEntity<ActivityResponse> trackActivity(@RequestBody ActivityRequest request){
+        log.info("POST /api/activities received for userId={}, type={}", request.getUserId(), request.getType());
         return ResponseEntity.ok(activityService.trackActivity(request));
     }
 
     @GetMapping
     public ResponseEntity<List<ActivityResponse>> getUserActivities(@RequestHeader ("X-User-ID") String userId) {
+        log.info("GET /api/activities received for userId={}", userId);
         return ResponseEntity.ok(activityService.getUserActivities(userId));
     }
     
     @GetMapping("/{activityId}")
     public ResponseEntity<ActivityResponse> getActivity(@PathVariable String activityId) {
+        log.info("GET /api/activities/{} received", activityId);
         return ResponseEntity.ok(activityService.getActivityById(activityId));
     }
 }
