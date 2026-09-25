@@ -3,15 +3,15 @@ spring:
     name: activity-service
 
   config:
-    import: optional:file:./atlas-credentials.env[.properties]
+    import: optional:file:.env[.properties]
 
   mongodb:
     uri: ${MONGODB_URI}
-    database: ${MONGODB_DATABASE:fitnessactivity}
+    database: ${MONGODB_DATABASE}
     
 eureka:
   client:
     service-url:
-      defaultZone: ${EUREKA_SERVER_URL:http://localhost:8761/eureka/}
+      defaultZone: ${EUREKA_SERVER_URL}
 server:
   port: 8082
