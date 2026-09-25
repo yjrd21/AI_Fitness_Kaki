@@ -12,9 +12,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ActivityMessageListener {
 
+    private final ActivityAIService activityAIService;
+
     @RabbitListener(queues = "${rabbitmq.queue.name}")
     public void processActivity(Activity activity) { 
-        log.info("Received activity message: {}", activity.getId());
+        log.info("Received activity message: {}", activity);
+        log.info("Generate recommendation for activity: {}", activityAIService.generateRecommendation(activity));
     }
 
 }
