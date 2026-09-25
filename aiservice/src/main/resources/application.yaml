@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: ai-service
+
+  config:
+    import: optional:file:.env[.properties]
+
+  mongodb:
+    uri: ${MONGODB_AI_URI}
+    database: ${MONGODB_AI_DATABASE}
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_SERVER_URL}
+  
+
+server:
+  port: 8083
