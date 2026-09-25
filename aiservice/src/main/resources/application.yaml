@@ -9,11 +9,26 @@ spring:
     uri: ${MONGODB_AI_URI}
     database: ${MONGODB_AI_DATABASE}
 
+  rabbitmq:
+    host: ${RABBITMQ_HOST}
+    port: ${RABBITMQ_PORT}
+    username: ${RABBITMQ_USERNAME}
+    password: ${RABBITMQ_PASSWORD}
+    
+
 eureka:
   client:
     service-url:
       defaultZone: ${EUREKA_SERVER_URL}
   
+
+rabbitmq:
+  exchange:
+    name: ${RABBITMQ_EXCHANGE_NAME}
+  queue:
+    name: ${RABBITMQ_QUEUE_NAME}
+  routing:
+    key: ${RABBITMQ_ROUTING_KEY}
 
 server:
   port: 8083
