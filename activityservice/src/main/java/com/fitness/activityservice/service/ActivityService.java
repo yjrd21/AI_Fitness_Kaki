@@ -4,16 +4,11 @@ import org.springframework.stereotype.Service;
 import com.fitness.activityservice.repository.ActivityRepository;
 import com.fitness.activityservice.model.Activity;
 
-import org.jspecify.annotations.Nullable;
-import org.springframework.http.ResponseEntity;
-
-
 import lombok.RequiredArgsConstructor;
 
 import com.fitness.activityservice.dto.ActivityRequest;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.Optional;
 /**
  * ActivityService
  */
@@ -22,8 +17,13 @@ import java.util.Optional;
 public class ActivityService {
 
     private final ActivityRepository activityRepository;
+    private final UserValidationService userValidationService;
 
     public ActivityResponse trackActivity(ActivityRequest request) {
+        boolean isValidUser = userValidationService.validateUser(request.getUserId());
+        if (!isValidUser) {
+            throw new RuntimeException("Invalid userId: " + request.getUserId());
+        }
         Activity activity = Activity.builder()
                 .userId(request.getUserId())
                 .type(request.getType())
@@ -62,4 +62,5 @@ public class ActivityService {
                 .map(this::mapToResponse)
                 .orElseThrow(() -> new RuntimeException("Activity not found with id: " + activityId));}
 
+    
 }
