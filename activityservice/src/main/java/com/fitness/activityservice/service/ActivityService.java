@@ -10,6 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import com.fitness.activityservice.dto.ActivityRequest;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 /**
  * ActivityService
  */
@@ -20,6 +23,13 @@ public class ActivityService {
 
     private final ActivityRepository activityRepository;
     private final UserValidationService userValidationService;
+    private final RabbitTemplate rabbitTemplate;
+
+    @Value("${rabbitmq.exchange.name}")
+    private String exchange;
+
+    @Value("${rabbitmq.routing.key}")
+    private String routingKey;
 
     public ActivityResponse trackActivity(ActivityRequest request) {
         log.info("Tracking activity for userId={}, type={}", request.getUserId(), request.getType());
@@ -36,8 +46,19 @@ public class ActivityService {
                 .startTime(request.getStartTime())
                 .additionalMetrics(request.getAdditionalMetrics())
                 .build();
+        
+        // Save the activity to DB
         Activity savedActivity = activityRepository.save(activity);
         log.info("Activity saved with activityId={} for userId={}", savedActivity.getId(), savedActivity.getUserId());
+
+        // Publish the activity to RabbitMQ for AI processing
+        try{
+            rabbitTemplate.convertAndSend(exchange, routingKey, savedActivity);
+            log.info("Published activityId={} to RabbitMQ exchange={} with routingKey={}", savedActivity.getId(), exchange, routingKey);
+        } catch (Exception e) {
+            log.error("Failed to publish activityId={} to RabbitMQ: {}", savedActivity.getId(), e.getMessage());
+        }
+
         return mapToResponse(savedActivity);
     }
 
